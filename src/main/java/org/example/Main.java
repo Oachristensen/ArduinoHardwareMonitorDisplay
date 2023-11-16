@@ -7,12 +7,17 @@ import java.lang.management.ManagementFactory;
 
 
 public class Main {
-    private static final SerialPort port = new SerialPort("COM3");
-
+    // The lower this is the faster the program updates its status
     private static final int sleepTimer = 1000;
+
+    // Change this to the COM port you connect your arduino to
+    private static final String portName = "COM3";
+
+
+    private static final SerialPort port = new SerialPort(portName);
+
+
     public static void main(String[] args) {
-        int systemCpuLoad;
-        int currentCpuLoad = 0;
         double physicalMemorySize;
         double freePhysicalMemory;
         int freeMemoryPercentage;
@@ -29,7 +34,7 @@ public class Main {
                 freePhysicalMemory = humanReadableByteCount(os.getFreeMemorySize());
                 freeMemoryPercentage = 100 - ((int) Math.round((freePhysicalMemory / physicalMemorySize) * 100));
 
-                systemCpuLoad = (int) Math.round(os.getCpuLoad() * 100);
+                int systemCpuLoad = (int) Math.round(os.getCpuLoad() * 100);
 
                 // _ is a break char for the serial.read function
                 port.writeString(systemCpuLoad + "% " + freeMemoryPercentage + "%_");
